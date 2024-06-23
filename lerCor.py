@@ -5,17 +5,43 @@ from pybricks.robotics import DriveBase
 from pybricks.tools import wait, StopWatch
 
 hub = PrimeHub()
-right_motor = Motor(Port.F)
-left_motor = Motor(Port.B, Direction.COUNTERCLOCKWISE)
-sensorV1 = ColorSensor(Port.D)
-sensorV2 = ColorSensor(Port.C)
+sensorLinhaA = ColorSensor(Port.B)
+sensorLinhaB = ColorSensor(Port.F)
+preto = []
 
-while True:
-    right_motor.dc(60)
-    left_motor.dc(60)
-    c1 = sensorV1.color()
-    c2 = sensorV2.color()
+def verPreto(sensor):
+    if preto[0] < sensor.hsv().h < preto[1] and preto[2] < sensor.hsv().s < preto[3] and preto[4] < sensor.hsv().v < preto[5]:
+        return True
+    else:
+        return False
 
-    print (c1, c2)
+def calibrar(lista):
+    watch = StopWatch()
+    dic = {"h":[], "s": [], "v": []}
+    while 100 > watch.time():
+        dic["h"].append(sensorLinhaA.hsv().h)
+        dic["s"].append(sensorLinhaA.hsv().s)
+        dic["v"].append(sensorLinhaA.hsv().v)
+
+        dic["h"].append(sensorLinhaB.hsv().h)
+        dic["s"].append(sensorLinhaB.hsv().s)
+        dic["v"].append(sensorLinhaB.hsv().v)
+    lista.append(min(dic["h"]) - 5) 
+    lista.append(max(dic["h"]) + 5) 
+    lista.append(min(dic["s"]) - 5) 
+    lista.append(max(dic["s"]) + 5) 
+    lista.append(min(dic["v"]) - 5) 
+    lista.append(max(dic["v"]) + 5)
+    return
+
+calibrar(preto)
+print(preto)
+
+
+  
+    
+
+
+ 
 
 
